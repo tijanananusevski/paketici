@@ -56,4 +56,11 @@ class Broker
 
         return $this->connection->query($upit);
     }
+
+    public function obrisi($paketic)
+    {
+        $upit = "DELETE FROM paketic WHERE paketicID= $paketic";
+
+        return $this->connection->query($upit);
+    }
 }

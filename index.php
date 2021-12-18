@@ -3,7 +3,6 @@
 require 'init.php';
 
 $ustanove = $broker->getUstanove();
-$paketici = $broker->pronadji(-1, "asc");
 ?>
 
 
@@ -44,8 +43,8 @@ $paketici = $broker->pronadji(-1, "asc");
             <ul>
                 <li><a class="nav-link scrollto active" href="#hero">Paketici</a></li>
                 <li><a class="nav-link scrollto" href="#unos">Unesi</a></li>
-                <li><a class="nav-link scrollto" href="#services">Izmeni</a></li>
-                <li><a class="nav-link scrollto o" href="#portfolio">Obrisi</a></li>
+                <li><a class="nav-link scrollto" href="#izmena">Izmeni</a></li>
+                <li><a class="nav-link scrollto o" href="#brisanje">Obrisi</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>
@@ -157,14 +156,7 @@ $paketici = $broker->pronadji(-1, "asc");
                 <div class="col-md-12">
                     <label for="paketicIzmena">Izaberi paketic za izmenu</label>
                     <select id="paketicIzmena" class="form-control">
-                        <?php
 
-                        foreach ($paketici as $paketic){
-                            ?>
-                            <option value="<?= $paketic->paketicID ?>"><?= $paketic->nazivUstanove . " " . $paketic->cenaPaketica . " rsd"  ?></option>
-                            <?php
-                        }
-                        ?>
                     </select>
                 </div>
                 <div class="col-md-12">
@@ -180,7 +172,29 @@ $paketici = $broker->pronadji(-1, "asc");
         </div>
     </section>
 
+    <section id="brisanje" class="about">
+        <div class="container" data-aos="fade-up">
 
+            <div class="section-title">
+                <h2>Brisanje paketica</h2>
+                <p id="porukaBrisanje"></p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="paketicBrisanje">Izaberi paketic za brisanje</label>
+                    <select id="paketicBrisanje" class="form-control">
+
+                    </select>
+                </div>
+                <hr>
+                <div class="col-md-12">
+                    <button class="btn btn-primary" onclick="obrisi()">Obrisi paketic</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
 
 </main>
 
@@ -231,6 +245,7 @@ $paketici = $broker->pronadji(-1, "asc");
             },
             success: function (podaciSaPronadjiStranice){
                 $("#box").html(podaciSaPronadjiStranice);
+                popuniKomboPaketica();
             }
         })
     }
@@ -277,6 +292,36 @@ $paketici = $broker->pronadji(-1, "asc");
             }
         })
 
+    }
+
+
+    function obrisi(){
+        let paketic = $("#paketicBrisanje").val();
+
+        $.ajax({
+            url: 'obrisi.php',
+            type: 'post',
+            data: {
+                paketic: paketic
+            },
+            success: function (poruka){
+                $("#porukaBrisanje").html(poruka);
+                pronadji();
+            }
+        })
+
+    }
+
+    function popuniKomboPaketica(){
+        $.ajax({
+            url: 'sviPaketici.php',
+
+            success: function (podaci){
+                $("#paketicBrisanje").html(podaci);
+                $("#paketicIzmena").html(podaci);
+
+            }
+        })
     }
 </script>
 
