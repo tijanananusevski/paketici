@@ -49,4 +49,11 @@ class Broker
 
         return $this->connection->query($upit);
     }
+
+    public function izmeni($paketic, $sastojci)
+    {
+        $upit = "UPDATE paketic SET sastojci = '$sastojci' WHERE paketicID= $paketic";
+
+        return $this->connection->query($upit);
+    }
 }

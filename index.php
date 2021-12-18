@@ -3,7 +3,7 @@
 require 'init.php';
 
 $ustanove = $broker->getUstanove();
-
+$paketici = $broker->pronadji(-1, "asc");
 ?>
 
 
@@ -145,6 +145,42 @@ $ustanove = $broker->getUstanove();
 
         </div>
     </section>
+    <section id="izmena" class="about">
+        <div class="container" data-aos="fade-up">
+
+            <div class="section-title">
+                <h2>Izmena sastojaka paketica</h2>
+                <p id="porukaIzmena"></p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="paketicIzmena">Izaberi paketic za izmenu</label>
+                    <select id="paketicIzmena" class="form-control">
+                        <?php
+
+                        foreach ($paketici as $paketic){
+                            ?>
+                            <option value="<?= $paketic->paketicID ?>"><?= $paketic->nazivUstanove . " " . $paketic->cenaPaketica . " rsd"  ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label for="sastojciIzmena">Novi sastojci paketica</label>
+                    <textarea id="sastojciIzmena" rows="5" class="form-control"></textarea>
+                </div>
+                <hr>
+                <div class="col-md-12">
+                    <button class="btn btn-primary" onclick="izmeni()">Izmeni sastojke paketica</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
 
 </main>
 
@@ -218,6 +254,25 @@ $ustanove = $broker->getUstanove();
             },
             success: function (poruka){
                 $("#porukaUnos").html(poruka);
+                pronadji();
+            }
+        })
+
+    }
+
+    function izmeni(){
+        let paketic = $("#paketicIzmena").val();
+        let sastojci = $("#sastojciIzmena").val();
+
+        $.ajax({
+            url: 'izmeni.php',
+            type: 'post',
+            data: {
+                paketic: paketic,
+                sastojci: sastojci,
+            },
+            success: function (poruka){
+                $("#porukaIzmena").html(poruka);
                 pronadji();
             }
         })
