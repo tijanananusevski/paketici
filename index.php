@@ -104,7 +104,43 @@ $ustanove = $broker->getUstanove();
 
             <div class="section-title">
                 <h2>Novi paketic</h2>
-                <p>Unos cene, sastojaka i ustanove za paketic </p>
+                <p id="porukaUnos"></p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="ustanova">Ustanova</label>
+                    <select id="ustanova" class="form-control">
+                        <?php
+
+                        foreach ($ustanove as $ustanova){
+                            ?>
+                            <option value="<?= $ustanova->ustanovaID ?>"><?= $ustanova->nazivUstanove ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="cena">Cena paketica</label>
+                    <input type="number" id="cena" class="form-control">
+                </div>
+                <div class="col-md-12">
+                    <label for="decak">Pol</label>
+                    <select id="decak" class="form-control">
+                        <option value="1">Paketic za decake</option>
+                        <option value="0">Paketic za devojcice</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label for="sastojci">Sastojci paketica</label>
+                    <textarea id="sastojci" rows="5" class="form-control"></textarea>
+                </div>
+                <hr>
+                <div class="col-md-12">
+                    <button class="btn btn-primary" onclick="unesi()">Unesi paketic</button>
+                </div>
             </div>
 
         </div>
@@ -157,13 +193,36 @@ $ustanove = $broker->getUstanove();
                 ustanova: ustanova,
                 sort: sort
             },
-            success: function (data){
-                $("#box").html(data);
+            success: function (podaciSaPronadjiStranice){
+                $("#box").html(podaciSaPronadjiStranice);
             }
         })
     }
 
     pronadji();
+
+    function unesi(){
+        let ustanova = $("#ustanova").val();
+        let cena = $("#cena").val();
+        let sastojci = $("#sastojci").val();
+        let decak = $("#decak").val();
+
+        $.ajax({
+            url: 'unesi.php',
+            type: 'post',
+            data: {
+                ustanova: ustanova,
+                cena: cena,
+                sastojci: sastojci,
+                decak: decak
+            },
+            success: function (poruka){
+                $("#porukaUnos").html(poruka);
+                pronadji();
+            }
+        })
+
+    }
 </script>
 
 </body>

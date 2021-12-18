@@ -42,4 +42,11 @@ class Broker
 
         return $podaci;
     }
+
+    public function unesi( $ustanova, $cena, $decak, $sastojci)
+    {
+        $upit = "INSERT INTO paketic VALUES (null, '$sastojci', $cena, $ustanova, $decak)";
+
+        return $this->connection->query($upit);
+    }
 }
